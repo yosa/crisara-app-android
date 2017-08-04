@@ -1,5 +1,6 @@
 package mx.melisa.crisara.crisara.Api;
 
+import mx.melisa.crisara.crisara.Api.Account.GetInformationResponse;
 import mx.melisa.crisara.crisara.Api.ShoppingCart.AddItemResponse;
 import mx.melisa.crisara.crisara.Api.ShoppingCart.DeleteResponse;
 import retrofit2.Call;
@@ -28,5 +29,18 @@ public interface EndPointsInterface {
 
     @DELETE("shoppingcart/{id}")
     Call<DeleteResponse> deleteItemShoppingCart(@Path("id") Integer id);
+
+    @FormUrlEncoded
+    @POST("auth/login")
+    Call<DefaultResponse> login(
+            @Field("email") String email,
+            @Field("password") String password
+    );
+
+    @GET("account")
+    Call<GetInformationResponse> accountGetInformation();
+
+    @GET("auth/logout")
+    Call<DefaultResponse> logout();
 
 }

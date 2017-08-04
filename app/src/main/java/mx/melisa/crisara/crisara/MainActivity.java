@@ -8,6 +8,8 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 
+import mx.melisa.crisara.crisara.Api.Account.GetInformationResponse;
+import mx.melisa.crisara.crisara.Api.DefaultResponse;
 import mx.melisa.crisara.crisara.Api.EndPointsInterface;
 import mx.melisa.crisara.crisara.Api.DefaultClient;
 import mx.melisa.crisara.crisara.Api.ShoppingCart.DeleteResponse;
@@ -25,6 +27,8 @@ public class MainActivity extends AppCompatActivity {
     public String token = null;
     public TextView txtResult =null;
     public TextView txtInput =null;
+    public TextView txtEmail =null;
+    public TextView txtPassword =null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         txtResult = (TextView)findViewById(R.id.txtResult);
         txtInput = (TextView)findViewById(R.id.txtNumber);
+        txtEmail = (TextView)findViewById(R.id.txtEmail);
+        txtPassword = (TextView)findViewById(R.id.txtPassword);
     }
 
     public void onClick(View v) {
@@ -50,7 +56,75 @@ public class MainActivity extends AppCompatActivity {
                 deleteItemShoppingCart();
                 break;
             }
+
+            case R.id.btnLogin: {
+                login();
+                break;
+            }
+
+            case R.id.btnLogout: {
+                logout();
+                break;
+            }
+
+            case R.id.btnAccountGetInformation: {
+                acountGetInformation();
+                break;
+            }
+
+            case R.id.btnAccountUpdateInformation: {
+                acountGetInformation();
+                break;
+            }
         }
+    }
+
+    public void logout()
+    {
+        Call<DefaultResponse> call = apiService.logout();
+        call.enqueue(new Callback<DefaultResponse>() {
+            @Override
+            public void onResponse(Call<DefaultResponse> call, Response<DefaultResponse> response) {
+                showResultResponse(response);
+            }
+
+            @Override
+            public void onFailure(Call<DefaultResponse> call, Throwable t) {
+                showResult(t.toString());
+            }
+        });
+    }
+
+    public void acountGetInformation()
+    {
+        Call<GetInformationResponse> call = apiService.accountGetInformation();
+        call.enqueue(new Callback<GetInformationResponse>() {
+            @Override
+            public void onResponse(Call<GetInformationResponse> call, Response<GetInformationResponse> response) {
+                showResultResponse(response);
+            }
+
+            @Override
+            public void onFailure(Call<GetInformationResponse> call, Throwable t) {
+                showResult(t.toString());
+            }
+        });
+    }
+
+    public void login()
+    {
+        Call<DefaultResponse> call = apiService.login(txtEmail.getText().toString(), txtPassword.getText().toString());
+        call.enqueue(new Callback<DefaultResponse>() {
+            @Override
+            public void onResponse(Call<DefaultResponse> call, Response<DefaultResponse> response) {
+                showResultResponse(response);
+            }
+
+            @Override
+            public void onFailure(Call<DefaultResponse> call, Throwable t) {
+                showResult(t.toString());
+            }
+        });
     }
 
     public void deleteItemShoppingCart()

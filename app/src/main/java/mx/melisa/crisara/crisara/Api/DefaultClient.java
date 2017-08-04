@@ -1,6 +1,7 @@
 package mx.melisa.crisara.crisara.Api;
 
 import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import android.content.Context;
@@ -17,12 +18,14 @@ public class DefaultClient {
     public static Retrofit getClient(Context context) {
         if (retrofit==null) {
 
-            OkHttpClient client = new OkHttpClient();
             OkHttpClient.Builder builder = new OkHttpClient.Builder();
+            HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+            logging.setLevel(HttpLoggingInterceptor.Level.BODY);
 
             builder.addInterceptor(new AddCookiesInterceptor(context)); // VERY VERY IMPORTANT
             builder.addInterceptor(new ReceivedCookiesInterceptor(context)); // VERY VERY IMPORTANT
-            client = builder.build();
+            builder.addInterceptor(logging);
+            OkHttpClient client = builder.build();
 
             retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
